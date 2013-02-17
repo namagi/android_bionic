@@ -178,7 +178,6 @@ libc_common_src_files := \
 	stdlib/wchar.c \
 	string/index.c \
 	string/memccpy.c \
-	string/memchr.c \
 	string/memmem.c \
 	string/memrchr.c \
 	string/memswap.c \
@@ -364,8 +363,10 @@ libc_common_src_files += \
 	string/strncmp.c \
 	unistd/socketcalls.c
 ifeq ($(ARCH_ARM_HAVE_ARMV7A),true)
+libc_common_src_files += arch-arm/bionic/memchr.S
 libc_common_src_files += arch-arm/bionic/strlen-armv7.S
 else
+libc_common_src_files += string/memchr.c
 libc_common_src_files += arch-arm/bionic/strlen.c.arm
 endif
 
