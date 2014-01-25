@@ -44,7 +44,7 @@ __BEGIN_DECLS
  **/
 
 /* maximum number of elements in the TLS array */
-#define BIONIC_TLS_SLOTS            64
+#define BIONIC_TLS_SLOTS            128
 
 /* note that slot 0, called TLS_SLOT_SELF must point to itself.
  * this is required to implement thread-local storage with the x86
