@@ -16,23 +16,19 @@
 
 #include <gtest/gtest.h>
 
-#include <dlfcn.h>
+#include <stdint.h>
+#include <unistd.h>
 
-static bool gCalled = false;
-extern "C" void DlSymTestFunction() {
-  gCalled = true;
+TEST(unistd, sysconf_SC_MONOTONIC_CLOCK) {
+  ASSERT_GT(sysconf(_SC_MONOTONIC_CLOCK), 0);
 }
 
-TEST(dlopen, dlsym_in_self) {
-  void* self = dlopen(NULL, RTLD_NOW);
-  ASSERT_TRUE(self != NULL);
+TEST(unistd, sbrk) {
+  void* initial_break = sbrk(0);
 
-  void* sym = dlsym(self, "DlSymTestFunction");
-  ASSERT_TRUE(sym != NULL);
+  void* new_break = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(initial_break) + 2000);
+  ASSERT_EQ(0, brk(new_break));
 
-  void (*function)() = reinterpret_cast<void(*)()>(sym);
-
-  gCalled = false;
-  function();
-  ASSERT_TRUE(gCalled);
+  void* final_break = sbrk(0);
+  ASSERT_EQ(final_break, new_break);
 }
