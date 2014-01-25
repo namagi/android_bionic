@@ -125,8 +125,8 @@ extern int __set_tls(void *ptr);
   * completely.
   */
 #      define __get_tls() \
-    ({ register unsigned int __val asm("r0"); \
-       asm ("mrc p15, 0, r0, c13, c0, 3" : "=r"(__val) ); \
+    ({ register unsigned int __val; \
+       asm ("mrc p15, 0, %0, c13, c0, 3" : "=r"(__val)); \
        __val = __munge_tls(__val); \
        (volatile void*)__val; })
 #    else /* !HAVE_ARM_TLS_REGISTER */
